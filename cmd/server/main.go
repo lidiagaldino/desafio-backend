@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/lidiagaldino/desafio-backend/cmd/server/config"
+	"github.com/lidiagaldino/desafio-backend/internal/application/usecase"
 	"github.com/lidiagaldino/desafio-backend/internal/infra/database"
 	"github.com/lidiagaldino/desafio-backend/internal/infra/web"
 	"github.com/spf13/viper"
@@ -34,5 +35,22 @@ func main() {
 		log.Fatal(err)
 	}
 	defer client.Disconnect(context.Background())
-	web.Initialize()
+
+	productRepository := database.NewProductRepository(client)
+
+	deleteProductUsecase := usecase.NewDeleteProductUsecase(productRepository)
+	createProductUsecase := usecase.NewCreateProductUsecase(productRepository)
+	updateProductUsecase := usecase.NewUpdateProductUsecase(productRepository)
+	getProductUsecase := usecase.NewFindProductByIDUsecase(productRepository)
+	getProductsUsecase := usecase.NewFindAllProductsUsecase(productRepository)
+
+	productUsecases := usecase.NewProductUsecases(
+		*getProductUsecase,
+		*getProductsUsecase,
+		*createProductUsecase,
+		*updateProductUsecase,
+		*deleteProductUsecase,
+	)
+
+	web.Initialize(productUsecases)
  }

@@ -1,0 +1,31 @@
+POST http://localhost:8080/api/v1/products
+Content-Type: application/json
+
+{
+    "title": "Product 1",
+    "description": "Product 1 description",
+    "price": 100.00,
+    "categoryId": "test",
+    "ownerId": "test"
+}
+
+###
+GET http://localhost:8080/api/v1/products/65ad2d962a627e0775ef39a1
+
+###
+GET http://localhost:8080/api/v1/products
+
+###
+PUT http://localhost:8080/api/v1/products/65ad2d962a627e0775ef39a1
+Content-Type: application/json
+
+{
+    "title": "Product 1 update",
+    "description": "Product 1 description",
+    "price": 100.00,
+    "categoryId": "test",
+    "ownerId": "test"
+}
+
+###
+DELETE http://localhost:8080/api/v1/products/65ad2d962a627e0775ef39a1
