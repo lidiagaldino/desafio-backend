@@ -5,8 +5,8 @@ import (
 	"github.com/lidiagaldino/desafio-backend/internal/application/usecase"
 )
 
-func Initialize(pu *usecase.ProductUsecases) {
+func Initialize(pu *usecase.ProductUsecases, cu *usecase.CategoryUsecases) {
 	r := gin.Default()
-	initializeRoutes(r, pu)
+	initializeRoutes(r, pu, cu)
 	r.Run()
 }

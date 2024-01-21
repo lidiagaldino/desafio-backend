@@ -52,5 +52,18 @@ func main() {
 		*deleteProductUsecase,
 	)
 
-	web.Initialize(productUsecases)
+	categoryRepository := database.NewCategoryRepository(client)
+	deleteCategoryUsecase := usecase.NewDeleteCategoryUsecase(categoryRepository)
+	createCategoryUsecase := usecase.NewCreateCategoryUsecase(categoryRepository)
+	updateCategoryUsecase := usecase.NewUpdateCategoryUsecase(categoryRepository)
+	getCategoryUsecase := usecase.NewFindCategoryByIDUsecase(categoryRepository)
+	getCategoriesUsecase := usecase.NewFindAllCategoriesUsecase(categoryRepository)
+	categoryUsecases := usecase.NewCategoryUsecases(
+    *getCategoryUsecase,
+    *getCategoriesUsecase,
+    *createCategoryUsecase,
+    *updateCategoryUsecase,
+		*deleteCategoryUsecase,
+  )
+	web.Initialize(productUsecases, categoryUsecases)
  }
