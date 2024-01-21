@@ -1,6 +1,8 @@
 package handler
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/lidiagaldino/desafio-backend/internal/application/dto"
 	"github.com/lidiagaldino/desafio-backend/internal/application/usecase"
@@ -37,30 +39,40 @@ func (h *CategoryHandler) FindAllCategories(ctx *gin.Context) {
 
 func (h *CategoryHandler) CreateCategory(ctx *gin.Context) {
 	var input dto.CategoryInputDTO
-  if err := ctx.ShouldBindJSON(&input); err!= nil {
-    utils.SendError(ctx, 400, err.Error())
-    return
-  }
-  category, err := h.cu.CreateCategoryUsecase.Execute(&input)
-  if err!= nil {
-    utils.SendError(ctx, 400, err.Error())
-    return
-  }
+if err := ctx.ShouldBindJSON(&input); err != nil {
+	utils.SendError(ctx, 400, err.Error())
+	return
+}
+err := input.Validate()
+if err != nil {
+	utils.SendError(ctx, http.StatusBadRequest, err.Error())
+	return
+}
+category, err := h.cu.CreateCategoryUsecase.Execute(&input)
+if err != nil {
+	utils.SendError(ctx, 400, err.Error())
+	return
+}
   utils.SendSuccess(ctx, "create-category", category, 201)
 }
 
 func (h *CategoryHandler) UpdateCategory(ctx *gin.Context) {
 	var input dto.CategoryInputDTO
-  if err := ctx.ShouldBindJSON(&input); err!= nil {
-    utils.SendError(ctx, 400, err.Error())
-    return
-  }
-  id := ctx.Param("id")
-  category, err := h.cu.UpdateCategoryUsecase.Execute(&input, id)
-  if err!= nil {
-    utils.SendError(ctx, 400, err.Error())
-    return
-  }
+if err := ctx.ShouldBindJSON(&input); err != nil {
+	utils.SendError(ctx, 400, err.Error())
+	return
+}
+err := input.Validate()
+if err != nil {
+	utils.SendError(ctx, http.StatusBadRequest, err.Error()) // Fix: Add a comma after the closing parenthesis
+	return
+}
+id := ctx.Param("id")
+category, err := h.cu.UpdateCategoryUsecase.Execute(&input, id)
+if err != nil {
+	utils.SendError(ctx, 400, err.Error())
+	return
+}
   utils.SendSuccess(ctx, "update-category", category, 200)
 }
 
