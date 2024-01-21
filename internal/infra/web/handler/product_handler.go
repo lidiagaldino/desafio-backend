@@ -2,6 +2,7 @@ package handler
 
 import (
 	"log"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/lidiagaldino/desafio-backend/internal/application/dto"
@@ -38,14 +39,20 @@ func (h *ProductHandler) FindAllProducts(ctx *gin.Context) {
 
 func (h *ProductHandler) CreateProduct(ctx *gin.Context) {
 	product := dto.ProductInputDTO{}
-  err := ctx.BindJSON(&product)
+	err := ctx.BindJSON(&product)
+	if err != nil {
+		utils.SendError(ctx, 400, err.Error())
+	}
+	err = product.Validate()
+	if err != nil {
+		utils.SendError(ctx, http.StatusBadRequest, err.Error())
+		return
+	}
 
-	log.Println(err)
-
-  newProduct, err := h.pu.CreateProductUsecase.Execute(&product)
-  if err!= nil {
-    utils.SendError(ctx, 500, "Error creating product" + err.Error())
-  }
+	newProduct, err := h.pu.CreateProductUsecase.Execute(&product)
+	if err != nil {
+		utils.SendError(ctx, 500, "Error creating product: "+err.Error())
+	}
   utils.SendSuccess(ctx, "create-product", newProduct, 201)
 }
 
