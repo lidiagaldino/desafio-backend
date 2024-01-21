@@ -59,15 +59,20 @@ func (h *ProductHandler) CreateProduct(ctx *gin.Context) {
 func (h *ProductHandler) UpdateProduct(ctx *gin.Context) {
 	product := dto.ProductInputDTO{}
 	id := ctx.Param("id")
-  err := ctx.ShouldBindJSON(&product)
-  if err!= nil {
-    utils.SendError(ctx, 400, "Invalid request body")
-  }
-  newProduct, err := h.pu.UpdateProductUsecase.Execute(&product, id)
+	err := ctx.ShouldBindJSON(&product)
+	if err != nil {
+		utils.SendError(ctx, 400, "Invalid request body")
+	}
+	err = product.Validate()
+	if err != nil {
+		utils.SendError(ctx, http.StatusBadRequest, err.Error())
+		return
+	}
+	newProduct, err := h.pu.UpdateProductUsecase.Execute(&product, id)
 	log.Println(newProduct)
-  if err!= nil {
-    utils.SendError(ctx, 500, "Error updating product" + err.Error())
-  }
+	if err != nil {
+		utils.SendError(ctx, 500, "Error updating product"+err.Error())
+	}
   utils.SendSuccess(ctx, "update-product", newProduct, 200)
 }
 
