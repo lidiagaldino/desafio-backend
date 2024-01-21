@@ -1,0 +1,29 @@
+POST http://localhost:8080/api/v1/categories
+Content-Type: application/json
+
+{
+    "title": "Category 1",
+    "description": "Category 1 description",
+    "ownerID": "5f8a4b7b9d3b3e1d1c9b4b7b"
+}
+
+###
+GET http://localhost:8080/api/v1/categories
+
+###
+GET http://localhost:8080/api/v1/categories/65ad6fa56e9a8da5d9e0f95e
+
+###
+PUT http://localhost:8080/api/v1/categories/65ad6fa56e9a8da5d9e0f95e
+Content-Type: application/json
+
+{
+    "title": "Category 1 update",
+    "description": "Category 1 description",
+    "ownerID": "5f8a4b7b9d3b3e1d1c9b4b7b"
+}
+
+###
+DELETE http://localhost:8080/api/v1/categories/65ad6fa56e9a8da5d9e0f95e
+
+###
