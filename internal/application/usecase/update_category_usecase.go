@@ -2,16 +2,21 @@ package usecase
 
 import (
 	"github.com/lidiagaldino/desafio-backend/internal/application/dto"
+	"github.com/lidiagaldino/desafio-backend/internal/domain/event"
 	"github.com/lidiagaldino/desafio-backend/internal/domain/repository"
 )
 
 type UpdateCategoryUsecase struct {
 	categoryRepository repository.CategoryRepository
+	sendMessage event.SendMessage
+	arn string
 }
 
-func NewUpdateCategoryUsecase(categoryRepository repository.CategoryRepository) *UpdateCategoryUsecase {
+func NewUpdateCategoryUsecase(categoryRepository repository.CategoryRepository, sendMessage event.SendMessage, arn string) *UpdateCategoryUsecase {
 	return &UpdateCategoryUsecase{
 		categoryRepository: categoryRepository,
+		sendMessage: sendMessage,
+    arn: arn,
 	}
 }
 
@@ -36,5 +41,9 @@ func (uc *UpdateCategoryUsecase) Execute(input *dto.CategoryInputDTO, id string)
 		OwnerID:     updatedCategory.OwnerID,
 		Description: updatedCategory.Description,
 	}
+	err = uc.sendMessage.Publish(uc.arn, dto.OwnerID)
+	if err!= nil {
+    return nil, err
+  }
 	return &dto, nil
 }

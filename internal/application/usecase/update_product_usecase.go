@@ -2,16 +2,21 @@ package usecase
 
 import (
 	"github.com/lidiagaldino/desafio-backend/internal/application/dto"
+	"github.com/lidiagaldino/desafio-backend/internal/domain/event"
 	"github.com/lidiagaldino/desafio-backend/internal/domain/repository"
 )
 
 type UpdateProductUsecase struct {
 	productRepository repository.ProductRepository
+	sendMessage event.SendMessage
+	arn string
 }
 
-func NewUpdateProductUsecase(productRepository repository.ProductRepository) *UpdateProductUsecase {
+func NewUpdateProductUsecase(productRepository repository.ProductRepository, sendMessage event.SendMessage, arn string) *UpdateProductUsecase {
 	return &UpdateProductUsecase{
     productRepository: productRepository,
+		sendMessage: sendMessage,
+    arn: arn,
   }
 }
 
@@ -40,5 +45,9 @@ func (uc *UpdateProductUsecase) Execute(input *dto.ProductInputDTO, id string) (
 		CategoryID:  updatedProduct.CategoryID,
 		OwnerID:     updatedProduct.OwnerID,
 	}
+	err = uc.sendMessage.Publish(uc.arn, dto.OwnerID)
+	if err!= nil {
+    return nil, err
+  }
 	return &dto, nil
 }

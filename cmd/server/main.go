@@ -59,7 +59,7 @@ func main() {
 
 	deleteProductUsecase := usecase.NewDeleteProductUsecase(productRepository)
 	createProductUsecase := usecase.NewCreateProductUsecase(productRepository, sns, config.AWS_SNS_TOPIC_ARN)
-	updateProductUsecase := usecase.NewUpdateProductUsecase(productRepository)
+	updateProductUsecase := usecase.NewUpdateProductUsecase(productRepository, sns, config.AWS_SNS_TOPIC_ARN)
 	getProductUsecase := usecase.NewFindProductByIDUsecase(productRepository)
 	getProductsUsecase := usecase.NewFindAllProductsUsecase(productRepository)
 
@@ -73,8 +73,8 @@ func main() {
 
 	categoryRepository := database.NewCategoryRepository(client)
 	deleteCategoryUsecase := usecase.NewDeleteCategoryUsecase(categoryRepository)
-	createCategoryUsecase := usecase.NewCreateCategoryUsecase(categoryRepository)
-	updateCategoryUsecase := usecase.NewUpdateCategoryUsecase(categoryRepository)
+	createCategoryUsecase := usecase.NewCreateCategoryUsecase(categoryRepository, sns, config.AWS_SNS_TOPIC_ARN)
+	updateCategoryUsecase := usecase.NewUpdateCategoryUsecase(categoryRepository, sns, config.AWS_SNS_TOPIC_ARN)
 	getCategoryUsecase := usecase.NewFindCategoryByIDUsecase(categoryRepository)
 	getCategoriesUsecase := usecase.NewFindAllCategoriesUsecase(categoryRepository)
 	categoryUsecases := usecase.NewCategoryUsecases(

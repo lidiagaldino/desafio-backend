@@ -16,11 +16,11 @@ GET http://localhost:8080/api/v1/products/65ad2d962a627e0775ef39a1
 GET http://localhost:8080/api/v1/products
 
 ###
-PUT http://localhost:8080/api/v1/products/65ad2d962a627e0775ef39a1
+PUT http://localhost:8080/api/v1/products/65ad7776a89abbac49da535f
 Content-Type: application/json
 
 {
-    "title": "Product 1 update",
+    "title": "Product 1 updates",
     "description": "Product 1 description",
     "price": 100.00,
     "categoryId": "test",
