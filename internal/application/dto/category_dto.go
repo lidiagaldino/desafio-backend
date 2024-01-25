@@ -5,7 +5,7 @@ import "fmt"
 type CategoryInputDTO struct {
 	Title       string `json:"title"`
 	Description string `json:"description"`
-	OwnerID     string `json:"owner_id"`
+	OwnerID     string `json:"ownerId"`
 }
 
 func (c *CategoryInputDTO) Validate() error {

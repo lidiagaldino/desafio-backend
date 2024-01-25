@@ -4,7 +4,7 @@ Content-Type: application/json
 {
     "title": "Category 1",
     "description": "Category 1 description",
-    "ownerID": "5f8a4b7b9d3b3e1d1c9b4b7b"
+    "ownerId": "5f8a4b7b9d3b3e1d1c9b4b7b"
 }
 
 ###

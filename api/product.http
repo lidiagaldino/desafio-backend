@@ -5,7 +5,7 @@ Content-Type: application/json
     "title": "Product 2",
     "description": "Product 2 description",
     "price": 100.00,
-    "categoryId": "test",
+    "categoryId": "65b27e77b598147c06191045",
     "ownerId": "test"
 }
 

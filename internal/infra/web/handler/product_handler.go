@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -50,10 +49,18 @@ func (h *ProductHandler) CreateProduct(ctx *gin.Context) {
 	}
 
 	newProduct, err := h.pu.CreateProductUsecase.Execute(&product)
+
 	if err != nil {
-		utils.SendError(ctx, 500, "Error creating product: "+err.Error())
+		if err.Error() == "mongo: no documents in result" {
+			utils.SendError(ctx, 404, "Category not found: " +  err.Error())
+		} else {
+			utils.SendError(ctx, 500, "Error creating product: "+err.Error())
+		}
+		
+	} else {
+		 utils.SendSuccess(ctx, "create-product", newProduct, 201)
 	}
-  utils.SendSuccess(ctx, "create-product", newProduct, 201)
+ 
 }
 
 func (h *ProductHandler) UpdateProduct(ctx *gin.Context) {
@@ -69,11 +76,16 @@ func (h *ProductHandler) UpdateProduct(ctx *gin.Context) {
 		return
 	}
 	newProduct, err := h.pu.UpdateProductUsecase.Execute(&product, id)
-	log.Println(newProduct)
 	if err != nil {
-		utils.SendError(ctx, 500, "Error updating product"+err.Error())
+		if err.Error() == "mongo: no documents in result" {
+			utils.SendError(ctx, 404, "not found: " +  err.Error())
+		} else {
+			utils.SendError(ctx, 500, "Error updating product: "+err.Error())
+		}
+		
+	} else {
+		 utils.SendSuccess(ctx, "create-product", newProduct, 200)
 	}
-  utils.SendSuccess(ctx, "update-product", newProduct, 200)
 }
 
 func (h *ProductHandler) DeleteProduct(ctx *gin.Context) {

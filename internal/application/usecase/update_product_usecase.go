@@ -8,19 +8,26 @@ import (
 
 type UpdateProductUsecase struct {
 	productRepository repository.ProductRepository
+	categoryRepository repository.CategoryRepository
 	sendMessage event.SendMessage
 	arn string
 }
 
-func NewUpdateProductUsecase(productRepository repository.ProductRepository, sendMessage event.SendMessage, arn string) *UpdateProductUsecase {
+func NewUpdateProductUsecase(productRepository repository.ProductRepository, sendMessage event.SendMessage, arn string, categoryRepository repository.CategoryRepository) *UpdateProductUsecase {
 	return &UpdateProductUsecase{
     productRepository: productRepository,
 		sendMessage: sendMessage,
+    categoryRepository: categoryRepository,
     arn: arn,
   }
 }
 
 func (uc *UpdateProductUsecase) Execute(input *dto.ProductInputDTO, id string) (*dto.ProductOutputDTO, error) {
+	_,err := uc.categoryRepository.FindByID(input.CategoryID)
+	if err!= nil {
+    return nil, err
+  }
+	
 	product, err := uc.productRepository.FindByID(id)
 	if err != nil {
 		return nil, err
