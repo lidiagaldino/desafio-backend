@@ -1,7 +1,7 @@
 package usecase
 
 import (
-	"fmt"
+	"encoding/json"
 
 	"github.com/lidiagaldino/desafio-backend/internal/application/dto"
 	"github.com/lidiagaldino/desafio-backend/internal/domain/event"
@@ -43,7 +43,13 @@ func (uc *UpdateCategoryUsecase) Execute(input *dto.CategoryInputDTO, id string)
 		OwnerID:     updatedCategory.OwnerID,
 		Description: updatedCategory.Description,
 	}
-	err = uc.sendMessage.Publish(uc.arn, fmt.Sprintf("%v", dto))
+
+	dtoBytes, err := json.Marshal(dto)
+		if err != nil {
+			return nil, err
+		}
+
+	err = uc.sendMessage.Publish(uc.arn, string(dtoBytes))
 	if err!= nil {
     return nil, err
   }
