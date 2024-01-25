@@ -1,6 +1,8 @@
 package usecase
 
 import (
+	"fmt"
+
 	"github.com/lidiagaldino/desafio-backend/internal/application/dto"
 	"github.com/lidiagaldino/desafio-backend/internal/domain/entity"
 	"github.com/lidiagaldino/desafio-backend/internal/domain/event"
@@ -49,7 +51,7 @@ func (uc *CreateProductUsecase) Execute(input *dto.ProductInputDTO) (*dto.Produc
 	    CategoryID:  createdProduct.CategoryID,
 			OwnerID:     createdProduct.OwnerID,
 		}
-		err = uc.sendMessage.Publish(uc.arn, dto.OwnerID)
+		err = uc.sendMessage.Publish(uc.arn, fmt.Sprintf("%v", dto))
 		if err!= nil {
 	    return nil, err
 	  }

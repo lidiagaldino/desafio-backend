@@ -1,6 +1,8 @@
 package usecase
 
 import (
+	"fmt"
+
 	"github.com/lidiagaldino/desafio-backend/internal/application/dto"
 	"github.com/lidiagaldino/desafio-backend/internal/domain/entity"
 	"github.com/lidiagaldino/desafio-backend/internal/domain/event"
@@ -33,14 +35,14 @@ func (uc *CreateCategoryUsecase) Execute(input *dto.CategoryInputDTO) (*dto.Cate
 	}
 
 	dto := dto.CategoryOutputDTO{
-		ID:    createdCategory.ID,
-		Title: createdCategory.Title,
-		OwnerID: createdCategory.OwnerID,
-    Description: createdCategory.Description,
+		ID:          createdCategory.ID,
+		Title:       createdCategory.Title,
+		OwnerID:     createdCategory.OwnerID,
+		Description: createdCategory.Description,
 	}
-	err = uc.sendMessage.Publish(uc.arn, dto.OwnerID)
-	if err!= nil {
-    return nil, err
-  }
+	err = uc.sendMessage.Publish(uc.arn, fmt.Sprintf("%v", dto))
+	if err != nil {
+		return nil, err
+	}
 	return &dto, nil
 }

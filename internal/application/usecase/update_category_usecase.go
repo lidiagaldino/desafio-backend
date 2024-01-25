@@ -1,6 +1,8 @@
 package usecase
 
 import (
+	"fmt"
+
 	"github.com/lidiagaldino/desafio-backend/internal/application/dto"
 	"github.com/lidiagaldino/desafio-backend/internal/domain/event"
 	"github.com/lidiagaldino/desafio-backend/internal/domain/repository"
@@ -41,7 +43,7 @@ func (uc *UpdateCategoryUsecase) Execute(input *dto.CategoryInputDTO, id string)
 		OwnerID:     updatedCategory.OwnerID,
 		Description: updatedCategory.Description,
 	}
-	err = uc.sendMessage.Publish(uc.arn, dto.OwnerID)
+	err = uc.sendMessage.Publish(uc.arn, fmt.Sprintf("%v", dto))
 	if err!= nil {
     return nil, err
   }
